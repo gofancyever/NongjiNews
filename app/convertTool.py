@@ -15,8 +15,8 @@ def readNews(url):
     return json.dumps(result)
 
 def getTitle(soup):
-    content_left = soup.find(class_=re.compile('content_left'))
-    title = content_left.h1.string
+    content = soup.find(class_=re.compile('basic'))
+    title = content.h1.string
     return title
 
 def getContentTxt(soup):
@@ -33,11 +33,30 @@ def getImg(soup):
         array.append(img.get('src'))
     return array
 
+def getPushTime(soup):
+    content = soup.find(class_=re.compile('basic'))
+    time = content.p
+    return time.string
 
 
+def getTable(soup):
+    table = soup.tbody
+    trs = table.find_all('tr')
+    for tr in trs:
+        for tb in tr.find_all('td'):
+            print(tb.string)
 
 
+    # for tb in tr:
+        # print(tb)
 
+url = "http://weixin.nongji360.com/news/view.php?id=213922"
+response = urllib.request.urlopen(url)
+html = response.read()
+soup = BeautifulSoup(html,'lxml')
+# print(getTitle(soup))
+# print(getPushTime(soup))
+getTable(soup)
 
 
 
