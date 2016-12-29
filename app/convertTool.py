@@ -20,11 +20,14 @@ def getTitle(soup):
     return title
 
 def getContentTxt(soup):
-    content_txt = soup.find(id = 'article_content')
-    array = []
-    for p in content_txt.strings:
-        array.append(p)
-    return array
+    content_txt = soup.find('div',class_='text')
+    ps = content_txt.find_all('p')
+    for p in ps:
+        if p.find('a') is None:
+            print(p.string)
+
+
+
 
 def getImg(soup):
     content_txt = soup.find(id = 'article_content')
@@ -42,10 +45,13 @@ def getPushTime(soup):
 def getTable(soup):
     table = soup.tbody
     trs = table.find_all('tr')
+    array = []
     for tr in trs:
+        tbs = []
         for tb in tr.find_all('td'):
-            print(tb.string)
-
+            tbs.append(tb.string)
+        array.append(tbs)
+    return array;
 
     # for tb in tr:
         # print(tb)
@@ -54,9 +60,9 @@ url = "http://weixin.nongji360.com/news/view.php?id=213922"
 response = urllib.request.urlopen(url)
 html = response.read()
 soup = BeautifulSoup(html,'lxml')
-# print(getTitle(soup))
+print(getContentTxt(soup))
 # print(getPushTime(soup))
-getTable(soup)
+# getTable(soup)
 
 
 
